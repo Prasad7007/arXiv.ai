@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+numpy
+nltk
+gensim
+pinecone
+python-dotenv
+transformers
+torch
+

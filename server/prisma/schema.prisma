@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  user_id    Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  first_name String
+  last_name  String
+  created_at DateTime @default(now())
+  is_active  Boolean  @default(false)
+
+  // Relations
+  search_history Search_History[]
+  bookmarks      Bookmarks[]
+}
+
+model Search_History {
+  history_id    Int      @id @default(autoincrement())
+  user_id       Int
+  query         String
+  date          DateTime
+  time          String
+  filters       String?
+  results_count Int
+
+  user Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+model Categories {
+  category_id Int      @id @default(autoincrement()) // Renamed for consistency
+  name        String
+  description String
+  created_at  DateTime @default(now())
+
+  // Relations
+  arxiv_papers Arxiv_Paper[]
+}
+
+model Arxiv_Paper {
+  paper_id       String      @id // Keep as String if the paper_id is not a UUID
+  title          String
+  abstract       String
+  category_id    Int
+  authors        String
+  published_date DateTime
+  row_number     Int
+  // Relations
+  category       Categories  @relation(fields: [category_id], references: [category_id])
+  bookmarks      Bookmarks[]
+}
+
+model Bookmarks {
+  bookmark_id Int      @id @default(autoincrement())
+  user_id     Int
+  paper_id    String // Changed to String to match Arxiv_Paper
+  created_at  DateTime @default(now())
+
+  user        Users       @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  arxiv_paper Arxiv_Paper @relation(fields: [paper_id], references: [paper_id], onDelete: Cascade)
+
+  // Prevent duplicate bookmarks
+  @@unique([user_id, paper_id])
+}
+
+model Summary {
+  summary_id   Int      @id @default(autoincrement())
+  query        String
+  summary      String
+  last_updated DateTime @default(now())
+}
+
+model Weekly_Paper {
+  weekly_paper_id Int      @id @default(autoincrement())
+  title           String
+  abstract        String
+  published_date  DateTime
+  authors         String
+}

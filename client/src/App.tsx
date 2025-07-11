@@ -8,6 +8,7 @@ import Summerizer from "./pages/Summerizer"
 import AboutUs from "./pages/AboutUs"
 import Paper from "./pages/Paper"
 import NoPage from "./pages/NoPage"
+import { Analytics } from "@vercel/analytics/next";
 
 function App() {
   
@@ -27,6 +28,7 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
+      <Analytics />
     </div>
   )
 }

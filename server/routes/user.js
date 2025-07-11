@@ -75,9 +75,14 @@ router.post("/signin", async (req, res) => {
 
     try{
         // Find user by username
-        const user = await prisma.users.findUnique({
-            where: { username: body.username },
-        });
+        try {
+            const user = await prisma.users.findUnique({
+                where: { username: body.username },
+            });
+        } catch (error) {
+            throw error;
+        }
+        
 
         if (!user) {
             return res.status(401).json({ message: "Invalid username or password" });

@@ -4,7 +4,7 @@ const rootRouter = require("./routes/index.js")
 
 const app = express();
 
-const allowedOrigins = [`${process.env.FRONTEND_URL}`];
+const allowedOrigins = [`${process.env.FRONTEND_URL}`, "http://localhost:5173"];
 
 app.use(cors({
   origin: allowedOrigins,

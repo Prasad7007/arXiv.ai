@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { PrismaClient } = require("@prisma/client");
+const prisma = require("../prisma/client.js");
 const { storeQuerySchema, filterSchema, getPaperByIds, getPaperByPaperId } = require("../zod/zod_paper.js");
-
-const prisma = new PrismaClient();
 
 router.use(express.json())
 

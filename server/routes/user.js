@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { userBookmarksSchema, signinSchema, signupSchema, searchHistorySchema, deleteUserBookmarksSchema } = require("../zod/zod_user.js");
-const { PrismaClient } = require("@prisma/client");
+const prisma = require("../prisma/client.js");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config.js");
 const authMiddleware = require("../middleware/middleware.js");
 
-const prisma = new PrismaClient();
 
 router.use(["/storeHistory", "/fetchHistory", "/userBookmarks", "/fetchBookmark"], authMiddleware);
 

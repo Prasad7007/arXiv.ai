@@ -1,6 +1,6 @@
 import bookmarklight from "./../assets/bookmark-regular.svg"
 import axios from 'axios'
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 type PaperProps = {
     title: string;
     published_date: string;
@@ -17,7 +17,7 @@ function PaperCard({props}: {props: PaperProps}) {
             console.log("user_id:", user);
             console.log("paper_id:", props.paper_id);
             if(user) {
-                await axios.post("http://localhost:3000/api/arxiv/user/userBookmarks", {
+                await axios.post(`${backendUrl}/api/arxiv/user/userBookmarks`, {
                                 user_id: parseInt(user),
                                 paper_id: `${props.paper_id}`
                 })

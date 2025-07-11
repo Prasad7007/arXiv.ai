@@ -7,6 +7,7 @@ import PaperCard from '../components/PaperCard';
 import TrendChart from '../components/TrendChart';
 import HistoryCard from '../components/HistoryCard';
 import BookmarkCard from '../components/BookmarkCard';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 function Dashboard() {
   const [searchText, setSearchText] = useState('');
@@ -22,6 +23,7 @@ function Dashboard() {
   const [bookmark, setBookmarks] = useState([]);
   const [bookmarkid, setBookmarkId] = useState([]);
   const [bookMarkNumber, setBookMarkNumber] = useState([]);
+  
 
   useEffect(() => {
     setFocusRecommenadtion(true);
@@ -33,19 +35,19 @@ function Dashboard() {
   const handleSearch = async () => {
     console.log("Searching for:", searchText);
     handleTopicClick(setFocusRecommenadtion);
-    const paperIds = await axios.post("http://localhost:8000/api/arxiv/user/search", {
+    const paperIds = await axios.post(`${backendUrl}/api/arxiv/user/search`, {
       data: searchText
     });
 
     const paperArray = paperIds.data.data.map((num: string) => parseInt(num));
-    const fetchedPapers = await axios.post("http://localhost:3000/api/arxiv/paper/getPaperByIds", {
+    const fetchedPapers = await axios.post(`${backendUrl}/api/arxiv/paper/getPaperByIds`, {
       ids: paperArray
     });
 
     if(fetchedPapers.data) {
       setPaper(fetchedPapers.data.data);
       
-      await axios.post("http://localhost:3000/api/arxiv/user/storeHistory", {
+      await axios.post(`${backendUrl}/api/arxiv/user/storeHistory`, {
         user_id: parseInt(localStorage.getItem("user_id") || "0"),
         query: searchText,
         date: new Date().toLocaleDateString(),
@@ -58,7 +60,7 @@ function Dashboard() {
 
   useEffect(() => {
     async function fetchHistory() {
-      const userHistory = await axios.get(`http://localhost:3000/api/arxiv/user/fetchHistory/${localStorage.getItem("user_id")}`);
+      const userHistory = await axios.get(`${backendUrl}/api/arxiv/user/fetchHistory/${localStorage.getItem("user_id")}`);
       if(userHistory.data.data) {
         setHistory(userHistory.data.data);
       }
@@ -69,7 +71,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchTrend = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/arxiv/paper/fetchtrend");
+        const response = await axios.get(`${backendUrl}/api/arxiv/paper/fetchtrend`);
         setTrend(JSON.stringify(response.data));
       } catch (error) {
         console.error("Error fetching trend data:", error);
@@ -81,7 +83,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchPaper = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/arxiv/paper/getallpapers");
+        const response = await axios.get(`${backendUrl}/api/arxiv/paper/getallpapers`);
         setPaper(response.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -93,7 +95,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/arxiv/paper/categories");
+        const response = await axios.get(`${backendUrl}/api/arxiv/paper/categories`);
         const fetchedCategories = response.data.data.map((category: { name: string; }) => category.name);
         setCategories(["All", ...fetchedCategories]);
       } catch (error) {
@@ -106,7 +108,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchBookmark = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/arxiv/user/fetchBookmark", {
+        const response = await axios.get(`${backendUrl}/api/arxiv/user/fetchBookmark`, {
           params: { user_id: localStorage.getItem("user_id") },
         });
 
@@ -129,7 +131,7 @@ function Dashboard() {
       if (bookmarkid.length === 0) return;
 
       try {
-        const fetchedPapers = await axios.post("http://localhost:3000/api/arxiv/paper/getPaperByPaperId", {
+        const fetchedPapers = await axios.post(`${backendUrl}/api/arxiv/paper/getPaperByPaperId`, {
           ids: bookmarkid,
         });
         setBookmarks(fetchedPapers.data.data);
@@ -143,7 +145,7 @@ function Dashboard() {
   const handleFilter = async (e: string) => {
     setFilter(e);
     const isTrue = (e !== 'All' ? e : "");
-    const filteredData = await axios.post("http://localhost:3000/api/arxiv/paper/filter", {
+    const filteredData = await axios.post(`${backendUrl}/api/arxiv/paper/filter`, {
       filter: isTrue
     });
     setPaper(filteredData.data.data.slice(0,20));

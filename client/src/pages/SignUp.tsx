@@ -4,6 +4,7 @@ import InputBox from '../components/InputBox'
 import Button from '../components/Button'
 import { useNavigate, NavLink } from 'react-router-dom'
 import axios from 'axios'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
 function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,7 +15,7 @@ function SignUp() {
 
   const handleSubmit = async () => {
       try {
-        const response = await axios.post("http://localhost:3000/api/arxiv/user/signup", {
+        const response = await axios.post(`${backendUrl}/api/arxiv/user/signup`, {
             first_name: firstName,
             last_name: lastName,
             username: username,

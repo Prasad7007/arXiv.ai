@@ -17,7 +17,7 @@ function Dashboard() {
   const [focusTrending, setFocusTrending] = useState(false);
   const [focusHistory, setFocusHistory] = useState(false);
   const [focusBookmarks, setFocusBookmarks] = useState(false);
-  const [trend, setTrend] = useState("");
+  const [trend, setTrend] = useState("[]");
   const [getfilter, setFilter] = useState("");
   const [history, setHistory] = useState([]);
   const [bookmark, setBookmarks] = useState([]);

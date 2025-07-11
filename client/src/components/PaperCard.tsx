@@ -1,7 +1,14 @@
-import React, { useRef, useState } from 'react'
 import bookmarklight from "./../assets/bookmark-regular.svg"
 import axios from 'axios'
-function PaperCard({props}) {
+
+type PaperProps = {
+    title: string;
+    published_date: string;
+    abstract: string;
+    paper_id: string;
+}
+
+function PaperCard({props}: {props: PaperProps}) {
 
     const user = localStorage.getItem("user_id");
 

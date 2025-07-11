@@ -1,6 +1,5 @@
-import React from 'react';
 
-function Button({ type, label, onClick }) {
+function Button({ type, label, onClick }: {type: "button" | "submit", label: string, onClick: () => void}) {
   return (
     <button 
       type={type} 

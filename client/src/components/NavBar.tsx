@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from "../assets/logoipsum-245.svg"
 import { useNavigate } from 'react-router-dom';
 

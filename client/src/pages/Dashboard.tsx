@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputBox from '../components/InputBox';
 import Button from '../components/Button';
 import filter from "../assets/filter.svg";
@@ -7,7 +7,6 @@ import PaperCard from '../components/PaperCard';
 import TrendChart from '../components/TrendChart';
 import HistoryCard from '../components/HistoryCard';
 import BookmarkCard from '../components/BookmarkCard';
-import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
   const [searchText, setSearchText] = useState('');
@@ -38,7 +37,7 @@ function Dashboard() {
       data: searchText
     });
 
-    const paperArray = paperIds.data.data.map((num) => parseInt(num));
+    const paperArray = paperIds.data.data.map((num: string) => parseInt(num));
     const fetchedPapers = await axios.post("http://localhost:3000/api/arxiv/paper/getPaperByIds", {
       ids: paperArray
     });
@@ -47,7 +46,7 @@ function Dashboard() {
       setPaper(fetchedPapers.data.data);
       
       await axios.post("http://localhost:3000/api/arxiv/user/storeHistory", {
-        user_id: parseInt(localStorage.getItem("user_id")),
+        user_id: parseInt(localStorage.getItem("user_id") || "0"),
         query: searchText,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString("en-US",{hour12:false}).split(" ")[0],
@@ -95,7 +94,7 @@ function Dashboard() {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/arxiv/paper/categories");
-        const fetchedCategories = response.data.data.map(category => category.name);
+        const fetchedCategories = response.data.data.map((category: { name: string; }) => category.name);
         setCategories(["All", ...fetchedCategories]);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -112,10 +111,10 @@ function Dashboard() {
         });
 
         if (response.data && response.data.data.length) {
-          const paper_ids = response.data.data.map((obj) => obj.paper_id);
+          const paper_ids = response.data.data.map((obj: {paper_id: number}) => obj.paper_id);
           setBookmarkId(paper_ids);
 
-          const book_ids = response.data.data.map((obj) => obj.bookmark_id);
+          const book_ids = response.data.data.map((obj: {bookmark_id: number}) => obj.bookmark_id);
           setBookMarkNumber(book_ids);
         }
       } catch (error) {
@@ -141,7 +140,7 @@ function Dashboard() {
     fetchBookmarkedPapers();
   }, [bookmarkid, bookMarkNumber]);
 
-  const handleFilter = async (e) => {
+  const handleFilter = async (e: string) => {
     setFilter(e);
     const isTrue = (e !== 'All' ? e : "");
     const filteredData = await axios.post("http://localhost:3000/api/arxiv/paper/filter", {
@@ -150,7 +149,7 @@ function Dashboard() {
     setPaper(filteredData.data.data.slice(0,20));
   };
 
-  const handleTopicClick = (fn) => {
+  const handleTopicClick = (fn: (e: boolean) => void) => {
     setFocusRecommenadtion(false);
     setFocusTrending(false);
     setFocusHistory(false);
@@ -158,9 +157,10 @@ function Dashboard() {
     fn(true);
   };
 
-  const handleBookmarkDelete = (deleteBookmarkId) => {
-    const updatedBookmarkId = bookMarkNumber.filter((_, index) => bookMarkNumber[index] !== deleteBookmarkId);
-    const updatedPaperId = bookmarkid.filter((_, index) => bookMarkNumber[index] !== deleteBookmarkId);
+  const handleBookmarkDelete = (deleteBookmarkId: string) => {
+    const deleteIdNum = Number(deleteBookmarkId);
+    const updatedBookmarkId = bookMarkNumber.filter((_, index) => bookMarkNumber[index] !== deleteIdNum);
+    const updatedPaperId = bookmarkid.filter((_, index) => bookMarkNumber[index] !== deleteIdNum);
     setBookMarkNumber(updatedBookmarkId);
     setBookmarkId(updatedPaperId);
   };

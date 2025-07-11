@@ -1,8 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import {useState } from 'react'
 import bookmarksolid from "./../assets/bookmark-solid.svg"
 import axios from 'axios'
-function BookmarkCard({props, bookmarkid, onRemove}) {
-    const [res, setRes] = useState();
+
+type BookmarkProps = {
+    title: string;
+    published_date: string;
+    abstract: string;
+};
+
+function BookmarkCard({props, bookmarkid, onRemove}: {props: BookmarkProps, bookmarkid: string, onRemove: (id: string) => void }) {
+    const [, setRes] = useState();
 
     console.log("Bookmark: ",props);
     console.log("bookmark ids:", bookmarkid);

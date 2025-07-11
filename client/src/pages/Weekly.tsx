@@ -1,4 +1,3 @@
-import React from 'react'
 
 function Weekly() {
   return (
@@ -32,7 +31,13 @@ function Weekly() {
     </div>
   )
 }
-const PaperCard = (props) => {
+interface PaperCardProps {
+  title: string;
+  published_date: string;
+  abstract: string;
+}
+
+const PaperCard = (props: PaperCardProps) => {
   return (
     <div className='flex justify-center'>
       <div className='bg-blue-200 m-5 min-w-[45.55rem] border-4 rounded-md border-blue-700'>

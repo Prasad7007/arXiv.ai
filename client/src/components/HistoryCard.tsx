@@ -1,6 +1,11 @@
-import React from 'react'
+type HistoryProps = {
+    query: string;
+    date: string;
+    filters?: string;
+    results_count: number;
+}
 
-function HistoryCard({props}) {
+function HistoryCard({props}: {props: HistoryProps}) {
   return (
     <div className='m-10 border-4 rounded-lg border-blue-700 bg-blue-200'>
         <div className='flex justify-between items-center p-2'>

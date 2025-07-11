@@ -1,8 +1,9 @@
 import { AgCharts } from "ag-charts-react";
 import { useState } from "react";
+import type { AgChartOptions } from "ag-charts-community";
 
-const TrendChart = ({trend}) => {
-    const [options, setOptions] = useState({
+const TrendChart = ({trend}: {trend: string}) => {
+    const [options,] = useState<AgChartOptions>({
         data: JSON.parse(trend),
         series: [{type: "bar", xKey: "month", yKey: "paper_count"}],
         axes: [

@@ -1,6 +1,4 @@
-import React from 'react';
-
-function InputBox({ type, placeholder, onChange }) {
+function InputBox({ type, placeholder, onChange }: { type: "text" | "password" | "number", placeholder: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void}) {
   return (
     <input 
       type={type} 

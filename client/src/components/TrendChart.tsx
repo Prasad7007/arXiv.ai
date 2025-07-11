@@ -12,7 +12,7 @@ const TrendChart = ({trend}) => {
         legend: { enabled: true },
     });
 
-    return <AgCharts options={options} />
+    return <div className="m-10 p-6 border-4 rounded-3xl border-blue-700 "><AgCharts options={options} /></div>
 }
 
 export default TrendChart

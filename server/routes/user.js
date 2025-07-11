@@ -4,9 +4,11 @@ const { userBookmarksSchema, signinSchema, signupSchema, searchHistorySchema, de
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config.js");
-
+const authMiddleware = require("../middleware/middleware.js");
 
 const prisma = new PrismaClient();
+
+router.use(["/storeHistory", "/fetchHistory", "/userBookmarks", "/fetchBookmark"], authMiddleware);
 
 
 router.post("/signup", async (req, res) => {
@@ -44,9 +46,12 @@ router.post("/signup", async (req, res) => {
             }
         });
 
+        const token = jwt.sign({user_id: newUser.user_id}, JWT_SECRET, {expiresIn: '1h'});
+
         return res.status(201).json({
             message: "User created successfully!",
-            user: { id: newUser.user_id, username: newUser.username }
+            user: { id: newUser.user_id, username: newUser.username },
+            token: token
         });
 
     } catch (error) {
@@ -90,6 +95,7 @@ router.post("/signin", async (req, res) => {
         return res.json({
             message: "User signed in successfully!",
             token: token,
+            user: {id:user.user_id}
         });
     }
     catch(error) {
@@ -139,9 +145,21 @@ router.post("/storeHistory", async (req, res) => {
     }
 })
 
-router.get("/fetchHistory", async (req, res) => {
-    const id = req.params.user_id;
+router.get("/fetchHistory/:user_id", async (req, res) => {
+    const id = parseInt(req.params.user_id);
     try {
+
+        const user = await prisma.users.findUnique({
+            where: {user_id: id}
+        })
+        
+        if(!user) {
+            return res.status(400).json({
+                message: "User not found!",
+                data: []
+            })
+        }
+
         const history = await prisma.search_History.findMany({
             where: {user_id: id}
         })
@@ -229,16 +247,16 @@ router.delete("/deleteUserBookmarks", async (req,res) => {
     }
 
     try {
-        const createBookmarks = await prisma.bookmarks.delete({
+        const deleteBookmarks = await prisma.bookmarks.delete({
             where: {
                 bookmark_id: body.bookmark_id
             } 
         })
 
-        if(createBookmarks) {
+        if(deleteBookmarks) {
             return res.status(200).json({
                 message: "User bookmarks deleted!",
-                data: createBookmarks
+                data: deleteBookmarks
             })
         }
     }

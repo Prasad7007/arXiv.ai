@@ -17,8 +17,9 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/weekly" element={<Weekly />} />
           <Route path="/summerizer" element={<Summerizer />} />

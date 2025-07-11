@@ -2,7 +2,7 @@ import React from 'react'
 
 function HistoryCard({props}) {
   return (
-    <div className='m-5 border-4 rounded-lg border-blue-700 bg-blue-200'>
+    <div className='m-10 border-4 rounded-lg border-blue-700 bg-blue-200'>
         <div className='flex justify-between items-center p-2'>
             <div className='font-medium'>
                 Query: {props.query}

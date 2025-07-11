@@ -20,7 +20,7 @@ function BookmarkCard({props, bookmarkid, onRemove}) {
         deleteBookmark();
     }
   return (
-    <div className='bg-blue-200 m-5 border-4 rounded-md border-blue-700'>
+    <div className='bg-blue-200 m-10 border-4 rounded-md border-blue-700'>
         <div>
             <div className="flex justify-between">
                 <div className='font-sans font-semibold text-lg m-5'>

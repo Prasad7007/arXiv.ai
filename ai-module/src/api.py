@@ -17,6 +17,7 @@ from gensim.models import Word2Vec
 from gensim.downloader import load
 from pinecone import Pinecone, ServerlessSpec
 from transformers import pipeline
+from langchain_google_genai import ChatGoogleGenerativeAI
 nltk.download("stopwords")
 nltk.download("punkt")
 nltk.download("wordnet")
@@ -99,10 +100,10 @@ async def semanticSearch(data: QuerySearch):
 @app.post("/api/arxiv/user/summerize")
 async def summerize(data: QuerySummerize):
 
-    summerizer = pipeline("summarization")
-    summerized_text = summerizer(data.data, max_length=300, min_length=100, do_sample=False)
-
-    return summerized_text[0]
+    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro")
+    summery = model.invoke(data.data);
+    
+    return summery.content
 
 
 if __name__ == '__main__':

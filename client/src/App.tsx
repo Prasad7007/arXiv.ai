@@ -1,17 +1,21 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom"
-import NavBar from "./components/NavBar"
-import Dashboard from "./pages/Dashboard"
-import SignIn from "./pages/SignIn"
-import SignUp from "./pages/SignUp"
-import Weekly from "./pages/Weekly"
-import Summerizer from "./pages/Summerizer"
-import AboutUs from "./pages/AboutUs"
-import Paper from "./pages/Paper"
-import NoPage from "./pages/NoPage"
-import { Analytics } from "@vercel/analytics/next";
+import { useEffect } from 'react';
+import { inject } from '@vercel/analytics';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Dashboard from "./pages/Dashboard";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Weekly from "./pages/Weekly";
+import Summerizer from "./pages/Summerizer";
+import AboutUs from "./pages/AboutUs";
+import Paper from "./pages/Paper";
+import NoPage from "./pages/NoPage";
 
 function App() {
-  
+  useEffect(() => {
+    inject();
+  }, []);
+
   return (
     <div>
       <BrowserRouter>
@@ -28,9 +32,8 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
-      <Analytics />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

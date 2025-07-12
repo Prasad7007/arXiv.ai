@@ -1,6 +1,8 @@
 import {useState } from 'react'
 import bookmarksolid from "./../assets/bookmark-solid.svg"
 import axios from 'axios'
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 
 type BookmarkProps = {
     title: string;
@@ -17,7 +19,7 @@ function BookmarkCard({props, bookmarkid, onRemove}: {props: BookmarkProps, book
     const handleClick = () => {
         const deleteBookmark = async () => {
             console.log("paper_id:", bookmarkid);
-            const response = await axios.delete("http://localhost:3000/api/arxiv/user/deleteUserBookmarks", {
+            const response = await axios.delete(`${backendUrl}/api/arxiv/user/deleteUserBookmarks`, {
                 data: {bookmark_id: parseInt(bookmarkid)}
             })
             setRes(response.data);

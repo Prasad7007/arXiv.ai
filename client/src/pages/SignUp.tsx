@@ -31,7 +31,7 @@ function SignUp() {
         localStorage.setItem("user", response.data.user.username);
 
         // Navigate to home page or dashboard
-        navigate("/");
+        navigate("/dasboard");
       } catch (error) {
         console.log("Error:", error);
       }
